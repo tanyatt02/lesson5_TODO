@@ -87,12 +87,12 @@ app.post('/create', async (req, res) => {
 
 app.post('/insert', async (req, res) => {
     let done = Array.isArray(req.body.done)
-    let todoItem = [
+    let todoItem = [options.name,
         done,
         req.body.title
     ]
     try {
-        await task.insert(pool, todoItem, options.name)
+        await task.insert(pool, todoItem)
     } catch (err) {
         console.log('ERROR insert = ', err.message)
         
@@ -107,9 +107,9 @@ console.log('options = ',options)
 app.post('/delete', async (req, res) => {
 
     let id = []
-    id.push(await findId(req.body.num))
+    id.push(options.name, await findId(req.body.num))
     try {
-        await task.delete(pool, id, options.name)
+        await task.delete(pool, id)
     } catch (err) {
         console.log('ERROR delete = ', err.message)
     }
@@ -123,9 +123,10 @@ app.post('/delete', async (req, res) => {
 app.post('/update', async (req, res) => {
     let id = await findId(req.body.num)
     let done = Array.isArray(req.body.done)
-    let todoItem = [done, req.body.title, id]
+    let todoItem = [options.name, done, req.body.title, id]
+    console.log('update todoItem = ', todoItem)
     try {
-        await task.update(pool, todoItem, options.name)
+        await task.update(pool, todoItem)
     } catch (err) {
         console.log('ERROR update = ', err.message)
     }
